@@ -51,6 +51,14 @@ pipeline{
 				}
 			}
 		}
+		stage('Functional Tests'){
+			steps{
+				dir('functional-tests'){
+					git 'https://github.com/AndersonJPereira/tasks-functional-test.git'
+					bat 'mvn clean test'			    
+				}
+			}
+		}
 	}
 }
 
