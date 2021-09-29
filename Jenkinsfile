@@ -29,7 +29,7 @@ pipeline{
 				}
 			}
 		}
-		stage('Deploy Task-Backend'){
+		stage('Deploy Backend'){
 			steps{
 				deploy adapters: [tomcat8(credentialsId: 'TomCatLogin', path: '', url: 'http://localhost:8001')], contextPath: 'tasks-backend', war: 'target/tasks-backend.war'
 			}
@@ -39,6 +39,15 @@ pipeline{
 				dir('api-tests'){
 					git 'https://github.com/AndersonJPereira/tasks-api-test.git'
 					bat 'mvn clean test'			    
+				}
+			}
+		}
+		stage('Deploy Frontend'){
+			steps{
+				dir('tasks-frontend'){
+					git 'https://github.com/AndersonJPereira/tasks-frontend.git'
+					bat 'mvn clean package'	
+					deploy adapters: [tomcat8(credentialsId: 'TomCatLogin', path: '', url: 'http://localhost:8001')], contextPath: 'tasks', war: 'target/tasks.war'		    
 				}
 			}
 		}
